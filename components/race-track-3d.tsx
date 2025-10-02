@@ -160,7 +160,7 @@ export const TrackScene = forwardRef<HTMLDivElement, TrackSceneProps>(
       elevationMultiplier = 2,
       trackWidth = 3,
       showTurnNumbers = true,
-      calloutDistance = 10,
+      calloutDistance = 20,
       interactive = true,
       onTrackClick,
       onTurnClick,
@@ -824,6 +824,9 @@ const TrackMesh = forwardRef<
 
   useImperativeHandle(ref, () => (useRibbon ? meshRef.current! : lineRef.current!), [useRibbon])
 
+  // Mobile performance optimization
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
   const { planeGeometry, curve } = useMemo(() => {
     const validPoints = trackData.filter((p) => {
       return p.x !== undefined && p.y !== undefined && p.z !== undefined && !isNaN(p.x) && !isNaN(p.y) && !isNaN(p.z)
@@ -847,7 +850,8 @@ const TrackMesh = forwardRef<
     const points = processedPoints.map((p) => new THREE.Vector3(p.x, p.y * elevationMultiplier - yOffset, p.z))
     const trackCurve = new THREE.CatmullRomCurve3(points, true)
 
-    const numSegments = validPoints.length * 4
+    // Reduce segments for mobile performance
+    const numSegments = typeof window !== 'undefined' && window.innerWidth < 768 ? validPoints.length * 2 : validPoints.length * 4
     const groundLevel = 0
 
     const vertices: number[] = []
@@ -894,7 +898,8 @@ const TrackMesh = forwardRef<
   }, [trackData, gradientColor, elevationMultiplier, smoothingLevel, groundOffset])
 
   const trackRibbonGeometry = useMemo(() => {
-    const numSegments = trackData.length * 4
+    // Reduce segments for mobile performance
+    const numSegments = typeof window !== 'undefined' && window.innerWidth < 768 ? trackData.length * 2 : trackData.length * 4
     const curvePoints = curve.getPoints(numSegments)
     const halfWidth = trackWidth * 0.5
 
@@ -951,7 +956,7 @@ const TrackMesh = forwardRef<
           <meshBasicMaterial color={lineColor} side={THREE.DoubleSide} />
         </mesh>
       ) : (
-        <line ref={lineRef} geometry={new THREE.BufferGeometry().setFromPoints(curve.getPoints(trackData.length * 4))}>
+        <line ref={lineRef} geometry={new THREE.BufferGeometry().setFromPoints(curve.getPoints(isMobile ? trackData.length * 2 : trackData.length * 4))}>
           <lineBasicMaterial color={lineColor} />
         </line>
       )}
@@ -1304,19 +1309,24 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
       <Suspense fallback={<div className="w-full h-full bg-black flex items-center justify-center text-white">Loading 3D Scene...</div>}>
         <Canvas
           camera={{ position: cameraPosition, fov: 50 }}
-          gl={{ antialias: true, preserveDrawingBuffer: true }}
-          shadows
+          gl={{
+            antialias: false,
+            preserveDrawingBuffer: true,
+            powerPreference: "high-performance",
+            stencil: false,
+            depth: true
+          }}
+          shadows={false}
           style={{ cursor: isClickToPlaceMode ? "crosshair" : "default" }}
-          dpr={[1, 2]}
+          dpr={typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 1.5) : 1}
         >
         <color attach="background" args={[backgroundColor]} />
 
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[100, 100, 50]} intensity={1.2} castShadow shadow-mapSize={[2048, 2048]} />
-        <directionalLight position={[-50, 50, -50]} intensity={0.3} />
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[100, 100, 50]} intensity={1.0} />
+        <directionalLight position={[-50, 50, -50]} intensity={0.4} />
         <hemisphereLight args={["#ffffff", "#b0b0b0", 0.6]} />
 
-        <Environment preset="city" />
 
         <CameraController
           onReady={(api) => {
