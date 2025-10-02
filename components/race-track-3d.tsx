@@ -1300,8 +1300,8 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
   }
 
   return (
-    <div className="w-full h-full relative">
-      <Suspense fallback={<div className="w-full h-full bg-slate-900 flex items-center justify-center text-white">Loading 3D Scene...</div>}>
+    <div className="w-full h-full relative" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <Suspense fallback={<div className="w-full h-full bg-black flex items-center justify-center text-white">Loading 3D Scene...</div>}>
         <Canvas
           camera={{ position: cameraPosition, fov: 50 }}
           gl={{ antialias: true, preserveDrawingBuffer: true }}

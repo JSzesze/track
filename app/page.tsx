@@ -153,7 +153,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-900 relative">
+    <main className="min-h-screen bg-black relative">
       <TrackScene
         trackData={trackPointsRaw.map((vec: any) => ({
           x: vec.x,
