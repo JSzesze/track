@@ -126,26 +126,26 @@ const THEMES = {
   },
 } as const
 
-// Turn data with racing details
+// Turn data with racing details (speeds in mph, max 65 mph)
 const TURN_DETAILS = [
-  { name: "Turn 1", type: "Medium-speed right-hander", speed: "120-140 km/h", gear: "4th", notes: "Brake early, trail brake through entry" },
-  { name: "Turn 2", type: "Slow hairpin left", speed: "60-80 km/h", gear: "2nd", notes: "Late apex, smooth throttle application" },
-  { name: "Turn 3", type: "Fast chicane entry", speed: "180-200 km/h", gear: "5th", notes: "Straight-line speed is crucial" },
-  { name: "Turn 4", type: "Technical right-left combo", speed: "100-120 km/h", gear: "3rd", notes: "Weight transfer management key" },
-  { name: "Turn 5", type: "Uphill left-hander", speed: "140-160 km/h", gear: "4th", notes: "Elevation changes affect grip" },
-  { name: "Turn 6", type: "Blind crest into right", speed: "160-180 km/h", gear: "5th", notes: "Commit to line before crest" },
-  { name: "Turn 7", type: "Downhill left carousel", speed: "120-140 km/h", gear: "4th", notes: "Use banking to carry speed" },
-  { name: "Turn 8", type: "Technical S-bend", speed: "90-110 km/h", gear: "3rd", notes: "Smooth inputs, avoid sawing wheel" },
-  { name: "Turn 9", type: "Fast right kink", speed: "170-190 km/h", gear: "5th", notes: "Minimal steering input needed" },
-  { name: "Turn 10", type: "Medium left-hander", speed: "130-150 km/h", gear: "4th", notes: "Good passing opportunity" },
-  { name: "Turn 11", type: "Slow right-hander", speed: "80-100 km/h", gear: "3rd", notes: "Late braking zone, patient exit" },
-  { name: "Turn 12", type: "Fast left sweep", speed: "160-180 km/h", gear: "5th", notes: "Use all the track on exit" },
-  { name: "Turn 13", type: "Technical right-left", speed: "110-130 km/h", gear: "3rd", notes: "Rhythm and flow important" },
-  { name: "Turn 14", type: "Medium downhill left", speed: "140-160 km/h", gear: "4th", notes: "Elevation helps rotation" },
-  { name: "Turn 15", type: "Fast right-hander", speed: "170-190 km/h", gear: "5th", notes: "Late apex for better exit" },
-  { name: "Turn 16", type: "Uphill chicane", speed: "100-120 km/h", gear: "3rd", notes: "Build speed gradually" },
-  { name: "Turn 17", type: "Final corner complex", speed: "120-140 km/h", gear: "4th", notes: "Sets up for main straight" },
-  { name: "Turn 18", type: "Fast left kink", speed: "180-200 km/h", gear: "5th", notes: "Full throttle commitment" },
+  { name: "Turn 1", type: "Medium-speed right-hander", speed: "55-65 mph", gear: "4th", notes: "Brake early, trail brake through entry" },
+  { name: "Turn 2", type: "Slow hairpin left", speed: "25-35 mph", gear: "2nd", notes: "Late apex, smooth throttle application" },
+  { name: "Turn 3", type: "Fast chicane entry", speed: "55-65 mph", gear: "5th", notes: "Straight-line speed is crucial" },
+  { name: "Turn 4", type: "Technical right-left combo", speed: "45-55 mph", gear: "3rd", notes: "Weight transfer management key" },
+  { name: "Turn 5", type: "Uphill left-hander", speed: "55-65 mph", gear: "4th", notes: "Elevation changes affect grip" },
+  { name: "Turn 6", type: "Blind crest into right", speed: "55-65 mph", gear: "5th", notes: "Commit to line before crest" },
+  { name: "Turn 7", type: "Downhill left carousel", speed: "55-65 mph", gear: "4th", notes: "Use banking to carry speed" },
+  { name: "Turn 8", type: "Technical S-bend", speed: "40-50 mph", gear: "3rd", notes: "Smooth inputs, avoid sawing wheel" },
+  { name: "Turn 9", type: "Fast right kink", speed: "55-65 mph", gear: "5th", notes: "Minimal steering input needed" },
+  { name: "Turn 10", type: "Medium left-hander", speed: "55-65 mph", gear: "4th", notes: "Good passing opportunity" },
+  { name: "Turn 11", type: "Slow right-hander", speed: "35-45 mph", gear: "3rd", notes: "Late braking zone, patient exit" },
+  { name: "Turn 12", type: "Fast left sweep", speed: "55-65 mph", gear: "5th", notes: "Use all the track on exit" },
+  { name: "Turn 13", type: "Technical right-left", speed: "50-60 mph", gear: "3rd", notes: "Rhythm and flow important" },
+  { name: "Turn 14", type: "Medium downhill left", speed: "55-65 mph", gear: "4th", notes: "Elevation helps rotation" },
+  { name: "Turn 15", type: "Fast right-hander", speed: "55-65 mph", gear: "5th", notes: "Late apex for better exit" },
+  { name: "Turn 16", type: "Uphill chicane", speed: "45-55 mph", gear: "3rd", notes: "Build speed gradually" },
+  { name: "Turn 17", type: "Final corner complex", speed: "55-65 mph", gear: "4th", notes: "Sets up for main straight" },
+  { name: "Turn 18", type: "Fast left kink", speed: "55-65 mph", gear: "5th", notes: "Full throttle commitment" },
 ] as const
 
 // Main reusable Track Scene Component
