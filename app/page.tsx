@@ -141,7 +141,6 @@ export default function Home() {
   const [showTurnDetails, setShowTurnDetails] = useState(false)
 
   const handleTrackClick = (position: [number, number, number]) => {
-    console.log("Track clicked at position:", position)
     // Hide turn details if clicking elsewhere
     setShowTurnDetails(false)
     setSelectedTurn(null)

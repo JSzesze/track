@@ -1,33 +1,3 @@
-/**
- * Race Track 3D Visualization Components
- *
- * This module provides reusable 3D race track visualization components for web applications.
- *
- * @example
- * ```tsx
- * import { TrackScene } from '@/components/race-track-3d'
- * import trackData from '@/data/track-points'
- *
- * function RaceTrackPage() {
- *   const handleTurnClick = (turnNumber: number, position: [number, number, number]) => {
- *     console.log(`Clicked turn ${turnNumber} at position:`, position)
- *   }
- *
- *   return (
- *     <div className="w-full h-screen">
- *       <TrackScene
- *         trackData={trackData}
- *         theme="neon"
- *         showTurnNumbers={true}
- *         interactive={true}
- *         onTurnClick={handleTurnClick}
- *       />
- *     </div>
- *   )
- * }
- * ```
- */
-
 "use client"
 import React, { useRef, useMemo, forwardRef, useImperativeHandle, useState, Suspense } from "react"
 import type { TrackPoint, AlternateRoute } from "./race-track-visualization"
@@ -608,11 +578,6 @@ function AlternateRouteTrack({
     allPoints.push(endPoint)
 
     if (route.segments && route.segments.length > 0) {
-      console.log("[v0] Creating route with segments:", route.segments)
-      console.log(
-        "[v0] All points:",
-        allPoints.map((p) => [p.x, p.y, p.z]),
-      )
 
       let currentIndex = 0
 
@@ -623,16 +588,11 @@ function AlternateRouteTrack({
           // Straight segment connects current point to next point
           const p1 = allPoints[currentIndex]
           const p2 = allPoints[currentIndex + 1]
-          console.log("[v0] Adding straight segment from", [p1.x, p1.y, p1.z], "to", [p2.x, p2.y, p2.z])
           path.add(new THREE.LineCurve3(p1, p2))
           currentIndex++
         } else if (segmentType === "curve") {
           // Curved segment uses all remaining points
           const curvePoints = allPoints.slice(currentIndex)
-          console.log(
-            "[v0] Adding curved segment with points:",
-            curvePoints.map((p) => [p.x, p.y, p.z]),
-          )
           // Use centripetal catmull-rom with zero tension for tighter curves
           path.add(new THREE.CatmullRomCurve3(curvePoints, false, "centripetal", 0))
           break // Curve uses all remaining points, so we're done
@@ -647,7 +607,6 @@ function AlternateRouteTrack({
     const numSegments = Math.max(100, allPoints.length * 20)
     const segmentPoints = path.getPoints(numSegments)
 
-    console.log("[v0] Generated", segmentPoints.length, "points along path")
 
     const gradientRGB = new THREE.Color(gradientColor)
     const groundLevel = 0
@@ -733,7 +692,6 @@ function AlternateRouteTrack({
     if (isClickable && onRouteClick) {
       event.stopPropagation()
       const point = event.point
-      console.log("[v0] Route clicked at:", [point.x, point.y, point.z])
       onRouteClick([point.x, point.y, point.z])
     }
   }
@@ -833,7 +791,6 @@ const TrackMesh = forwardRef<
     })
 
     if (validPoints.length < 2) {
-      console.error("[v0] Not enough valid points to create track")
       const fallbackCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0, 0), new THREE.Vector3(10, 0, 10)])
       const fallbackGeometry = new THREE.BufferGeometry()
       return { planeGeometry: fallbackGeometry, curve: fallbackCurve }
@@ -1094,19 +1051,13 @@ function CameraController({ onReady }: { onReady?: (api: any) => void }) {
   // Expose animation API through onReady callback
   onReady?.({
     animateToPosition: (targetPosition: [number, number, number], distance = 50, enableRotation = false) => {
-      console.log("[v0] animateToPosition called with:", targetPosition, distance, enableRotation)
-
       if (!camera || !camera.position) {
-        console.error("[v0] Camera not available")
         return
       }
 
       if (!controlsRef.current || !controlsRef.current.target) {
-        console.error("[v0] Controls not available")
         return
       }
-
-      console.log("[v0] Starting animation")
 
       const currentTarget = controlsRef.current.target.clone()
       const newTarget = new THREE.Vector3(...targetPosition)
@@ -1206,12 +1157,8 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
       }
     },
     zoomToPosition: (position: [number, number, number]) => {
-      console.log("[v0] zoomToPosition called from ref")
-      if (animationApiRef.current && animationApiRef.current.animateToPosition) {
-        console.log("[v0] Calling animateToPosition")
+        if (animationApiRef.current && animationApiRef.current.animateToPosition) {
         animationApiRef.current.animateToPosition(position, trackBounds.size * 0.3)
-      } else {
-        console.error("[v0] Animation API not ready")
       }
     },
   }))
@@ -1256,12 +1203,8 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
   ]
 
   const handleCalloutClick = (position: [number, number, number]) => {
-    console.log("[v0] Callout clicked:", position)
-
     // Animate camera to the clicked position (for all callouts)
     if (animationApiRef.current && animationApiRef.current.animateToPosition) {
-      console.log("[v0] Calling animateToPosition")
-
       // Check if this is a turn callout (not start/finish)
       const isTurn = turnCallouts.some(
         (callout) =>
@@ -1272,8 +1215,6 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
 
       // Enable rotation for turn callouts, but not for start/finish
       animationApiRef.current.animateToPosition(position, trackBounds.size * 0.3, isTurn)
-    } else {
-      console.error("[v0] Animation API not available")
     }
 
     // Check if this is the start/finish line
@@ -1282,7 +1223,6 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
                          Math.abs(startFinishPosition[2] - position[2]) < 5
 
     if (isStartFinish) {
-      console.log("[v0] Start/finish line clicked, showing track info")
       onToggleTrackInfo?.(true)
       onSelectTurn?.(null) // Hide turn details if showing
       onSetHudPosition?.(null)
@@ -1296,7 +1236,6 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
       )
 
       if (turnIndex >= 0) {
-        console.log("[v0] Turn callout clicked, calling turn handler")
         onSelectTurn?.(turnIndex)
         onSetHudPosition?.(position)
         onToggleTrackInfo?.(false) // Hide track info if showing turn details
@@ -1330,7 +1269,6 @@ const RaceTrack3D = forwardRef<RaceTrack3DHandle, RaceTrack3DProps>(function Rac
 
         <CameraController
           onReady={(api) => {
-            console.log("[v0] CameraController ready")
             animationApiRef.current = api
           }}
         />

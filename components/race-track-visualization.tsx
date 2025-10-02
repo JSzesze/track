@@ -155,12 +155,7 @@ export default function RaceTrackVisualization() {
   }
 
   const handleSceneClick = (position: [number, number, number]) => {
-    console.log("[v0] handleSceneClick called with position:", position)
-    console.log("[v0] isClickToPlaceMode:", isClickToPlaceMode)
-    console.log("[v0] selectedRouteId:", selectedRouteId)
-
     if (isClickToPlaceMode && selectedRouteId) {
-      console.log("[v0] Adding control point to route:", selectedRouteId)
       setAlternateRoutes((routes) =>
         routes.map((route) => {
           if (route.id === selectedRouteId) {
@@ -202,13 +197,6 @@ export default function RaceTrackVisualization() {
     )
   }
 
-  const logRouteCoordinates = (routeId: string) => {
-    const route = alternateRoutes.find((r) => r.id === routeId)
-    if (route) {
-      console.log(`Route: ${route.name}`)
-      console.log(JSON.stringify(route, null, 2))
-    }
-  }
 
   const toggleRouteVisibility = (routeId: string) => {
     setVisibleRoutes((prev) => {
